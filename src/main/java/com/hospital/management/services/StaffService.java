@@ -5,4 +5,6 @@ import com.hospital.management.apimodel.StaffCreationResponse;
 
 public interface StaffService {
     StaffCreationResponse addStaff(StaffCreationModel staffCreationModel);
+
+    StaffCreationResponse updateStaff(StaffCreationModel staffCreationModel, String uuid);
 }
