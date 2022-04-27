@@ -3,10 +3,14 @@ package com.hospital.management.services.impl;
 import com.hospital.management.apimodel.StaffCreationModel;
 import com.hospital.management.apimodel.StaffCreationResponse;
 import com.hospital.management.entities.Staff;
+import com.hospital.management.enums.ResponseCode;
+import com.hospital.management.exceptions.BadRequestException;
 import com.hospital.management.repositories.StaffRepository;
 import com.hospital.management.services.StaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +22,7 @@ public class StaffServiceImpl implements StaffService {
     public StaffCreationResponse addStaff(StaffCreationModel staffCreationModel) {
         String uuid = UUIDGeneration.generateUUID();
 
-        while (staffRepository.existsByUuidIgnoreCase(uuid)){
+        while (staffRepository.existsByUuidIgnoreCase(uuid)) {
             uuid = UUIDGeneration.generateUUID();
         }
 
@@ -30,11 +34,26 @@ public class StaffServiceImpl implements StaffService {
 
         Staff savedStaff = staffRepository.save(staff);
 
-        return getStaffCreationResponse(savedStaff);
+        return generateResponse(savedStaff);
 
     }
 
-    private StaffCreationResponse getStaffCreationResponse(Staff savedStaff) {
+    @Override
+    public StaffCreationResponse updateStaff(StaffCreationModel staffCreationModel, String uuid) {
+        Staff staff = staffRepository.findByUuidIgnoreCase(uuid);
+
+        if (Objects.isNull(staff)) {
+            throw new BadRequestException(ResponseCode.INVALID_STAFF_UUID);
+        }
+
+        staff.setName(staffCreationModel.getName());
+        staff.setRegistrationDate(staffCreationModel.getRegistrationDate());
+
+        Staff updatedStaff = staffRepository.save(staff);
+        return generateResponse(updatedStaff);
+    }
+
+    private StaffCreationResponse generateResponse(Staff savedStaff) {
         return StaffCreationResponse.builder()
                 .UUID(savedStaff.getUuid())
                 .name(savedStaff.getName())

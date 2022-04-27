@@ -4,6 +4,7 @@ package com.hospital.management.services.impl;
 import com.hospital.management.TestUtil;
 import com.hospital.management.apimodel.StaffCreationModel;
 import com.hospital.management.apimodel.StaffCreationResponse;
+import com.hospital.management.exceptions.BadRequestException;
 import com.hospital.management.repositories.StaffRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
@@ -52,5 +54,30 @@ public class StaffServiceImplTest {
         assertEquals(staffCreationModel.getName(), staffCreationResponse.getName());
         assertEquals(staffCreationModel.getRegistrationDate(), staffCreationResponse.getRegistrationDate());
 
+    }
+
+    @Test
+    public void updateStaffProfileFails_whenStaffWithUUIDDoesNotExist() {
+        when(staffRepository.findByUuidIgnoreCase("SFA116C848"))
+                .thenReturn(null);
+
+        assertThatThrownBy(() -> staffService.updateStaff(staffCreationModel, "SFA116C848"))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("Staff with this UUID does not exist.");
+
+    }
+
+    @Test
+    public void shouldUpdateStaffProfileSuccessfully() {
+        when(staffRepository.findByUuidIgnoreCase("SFA116C848"))
+                .thenReturn(TestUtil.createStaff());
+        when(staffRepository.save(ArgumentMatchers.any()))
+                .thenReturn(TestUtil.createStaff());
+
+        StaffCreationResponse creationResponse = staffService.updateStaff(staffCreationModel, "SFA116C848");
+
+        assertNotNull(creationResponse.getName());
+        assertNotNull(creationResponse.getRegistrationDate());
+        assertNotNull(creationResponse.getUUID());
     }
 }
