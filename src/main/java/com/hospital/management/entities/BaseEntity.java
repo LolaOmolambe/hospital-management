@@ -26,4 +26,7 @@ public class BaseEntity {
 
     @UpdateTimestamp
     private LocalDateTime lastModifiedOn;
+
+    @Version
+    private int version;
 }
