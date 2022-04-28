@@ -2,6 +2,8 @@ package com.hospital.management.services.impl;
 
 import com.hospital.management.apimodel.response.PatientResponse;
 import com.hospital.management.entities.Patient;
+import com.hospital.management.enums.ResponseCode;
+import com.hospital.management.exceptions.BadRequestException;
 import com.hospital.management.repositories.PatientRepository;
 import com.hospital.management.services.PatientService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,13 @@ public class PatientServiceImpl implements PatientService {
                 .collect(Collectors.toList());
     }
 
-    private PatientResponse buildPatientResponse (Patient patient) {
+    @Override
+    public Patient getPatient(Long id) {
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException(ResponseCode.INVALID_PATIENT_ID));
+    }
+
+    private PatientResponse buildPatientResponse(Patient patient) {
         return PatientResponse.builder()
                 .name(patient.getName())
                 .age(patient.getAge())
