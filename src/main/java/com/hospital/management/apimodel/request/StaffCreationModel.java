@@ -1,4 +1,4 @@
-package com.hospital.management.apimodel;
+package com.hospital.management.apimodel.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
