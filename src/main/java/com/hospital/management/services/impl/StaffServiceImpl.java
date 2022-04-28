@@ -1,7 +1,7 @@
 package com.hospital.management.services.impl;
 
-import com.hospital.management.apimodel.StaffCreationModel;
-import com.hospital.management.apimodel.StaffCreationResponse;
+import com.hospital.management.apimodel.request.StaffCreationModel;
+import com.hospital.management.apimodel.response.StaffCreationResponse;
 import com.hospital.management.entities.Staff;
 import com.hospital.management.enums.ResponseCode;
 import com.hospital.management.exceptions.BadRequestException;

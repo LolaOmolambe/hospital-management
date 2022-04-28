@@ -2,8 +2,8 @@ package com.hospital.management.services.impl;
 
 
 import com.hospital.management.TestUtil;
-import com.hospital.management.apimodel.StaffCreationModel;
-import com.hospital.management.apimodel.StaffCreationResponse;
+import com.hospital.management.apimodel.request.StaffCreationModel;
+import com.hospital.management.apimodel.response.StaffCreationResponse;
 import com.hospital.management.exceptions.BadRequestException;
 import com.hospital.management.repositories.StaffRepository;
 import org.junit.jupiter.api.BeforeEach;
