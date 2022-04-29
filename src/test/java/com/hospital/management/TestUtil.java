@@ -1,6 +1,7 @@
 package com.hospital.management;
 
 import com.hospital.management.apimodel.request.StaffCreationModel;
+import com.hospital.management.apimodel.response.StaffCreationResponse;
 import com.hospital.management.entities.Patient;
 import com.hospital.management.entities.Staff;
 import org.springframework.data.domain.Page;
@@ -41,5 +42,13 @@ public class TestUtil {
 
         patient.setId(1L);
         return patient;
+    }
+
+    public static StaffCreationResponse createStaffResponse() {
+        return StaffCreationResponse.builder()
+                .name("Test")
+                .registrationDate(LocalDate.of(2000, 4, 4))
+                .UUID("SF6FD755EF")
+                .build();
     }
 }
