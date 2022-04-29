@@ -7,6 +7,7 @@ import com.hospital.management.entities.Patient;
 import com.hospital.management.services.PatientService;
 import com.hospital.management.services.impl.CSVExportService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,10 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/patients")
 @RequiredArgsConstructor
@@ -38,11 +39,15 @@ public class PatientController {
     @GetMapping(path = "/{id}", produces = "text/csv")
     @ValidStaffUUID
     public void getPatient(@PathVariable(value = "id") Long id,
-                           HttpServletResponse servletResponse) throws IOException {
-        servletResponse.setContentType("text/csv");
-        servletResponse.addHeader("Content-Disposition", "attachment; filename=\"patient.csv\"");
-        Patient patient = patientService.getPatient(id);
-        csvExportService.writePatientToCsv(patient, servletResponse.getWriter());
+                           HttpServletResponse servletResponse) {
+        try{
+            servletResponse.setContentType("text/csv");
+            servletResponse.addHeader("Content-Disposition", "attachment; filename=\"patient.csv\"");
+            Patient patient = patientService.getPatient(id);
+            csvExportService.writePatientToCsv(patient, servletResponse.getWriter());
+        } catch (Exception e) {
+            log.error("Error while writing csv", e);
+        }
     }
 
     @DeleteMapping

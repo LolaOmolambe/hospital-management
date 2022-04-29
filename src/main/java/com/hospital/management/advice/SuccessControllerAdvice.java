@@ -22,7 +22,7 @@ public class SuccessControllerAdvice implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
         return APIResponse.builder()
                 .success(true)
-                .code(HttpStatus.OK.toString())
+                .code(String.valueOf(HttpStatus.OK.value()))
                 .message("Operation Successful")
                 .body(o)
                 .build();

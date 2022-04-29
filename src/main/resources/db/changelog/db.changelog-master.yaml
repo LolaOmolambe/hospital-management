@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/create-staff-schema.xml
   - include:
       file: db/changelog/create-patient-schema.xml
+  - include:
+      file: db/changelog/insert-patient-data.xml
